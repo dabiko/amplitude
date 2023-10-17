@@ -5,15 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Amplitude') }}</title>
+        <title>{{ config('app.name', 'Amplitude') }} | {{ $title ?? 'Dashboard' }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css"/>
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
         <!-- Styles -->
         @livewireStyles
     </head>
@@ -43,6 +44,7 @@
         </div>
 
         <x-notification />
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         @stack('modals')
 
         @livewireScripts
