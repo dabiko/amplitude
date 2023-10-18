@@ -1,6 +1,8 @@
 <?php
 
 use App\Livewire\BranchIndex;
+use App\Livewire\BranchView;
+use App\Livewire\DepartmentIndex;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,4 +30,7 @@ Route::middleware([
     })->name('dashboard');
 
     Route::get('/branch', BranchIndex::class)->name('branch.index');
+    Route::get('/department', DepartmentIndex::class)->name('department.index');
+
+
 });

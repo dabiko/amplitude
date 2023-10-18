@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Branch;
+use App\Models\Department;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
@@ -10,7 +10,7 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class BranchTable extends Component
+class DepartmentTable extends Component
 {
     use WithPagination;
 
@@ -47,12 +47,13 @@ class BranchTable extends Component
         $this->sortDirection = 'DESC';
     }
 
-    #[On('dispatch-branch-created')]
-    #[On('dispatch-branch-updated')]
-    #[On('dispatch-branch-deleted')]
+
+    #[On('dispatch-department-created')]
+    #[On('dispatch-department-updated')]
+    #[On('dispatch-department-deleted')]
     public function render(): View
     {
-        $branches = Branch::search($this->search)
+        $departments = Department::search($this->search)
             ->with(['user','updater'])
             ->when($this->status !== '', function ($query) {
                 $query->where('status', $this->status);
@@ -60,11 +61,9 @@ class BranchTable extends Component
             ->orderBy($this->sortBy,$this->sortDirection)
             ->paginate($this->per_page);
 
-
-
-        return view('livewire.branch-table',
+        return view('livewire.department-table',
             [
-                'branches' => $branches
+                'departments' => $departments
             ]
         );
     }

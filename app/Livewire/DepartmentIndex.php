@@ -3,15 +3,14 @@
 namespace App\Livewire;
 
 use Illuminate\View\View;
-use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-class BranchIndex extends Component
+class DepartmentIndex extends Component
 {
-    #[Title('Branches')]
+    #[Title('Departments')]
     public function render(): View
     {
-        return view('livewire.branch-index');
+        return view('livewire.department-index');
     }
 }

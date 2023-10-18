@@ -2,28 +2,27 @@
 
 namespace App\Livewire;
 
-use App\Http\Requests\BranchUpdateRequest;
-use App\Livewire\Forms\BranchForm;
-use App\Models\Branch;
+use App\Livewire\Forms\DepartmentForm;
+use App\Models\Department;
 use App\Traits\EncryptDecrypt;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class BranchEdit extends Component
+class EditDepartment extends Component
 {
     use EncryptDecrypt;
 
-    public BranchForm $form;
+    public DepartmentForm $form;
 
-    public bool $EditBranchModal = false;
+    public bool $EditDepartmentModal = false;
 
-    #[On('dispatch-edit-branch')]
-    public function set_branch(Branch $id): void
+    #[On('dispatch-edit-department')]
+    public function set_department(Department $id): void
     {
-        $this->form->setBranch($id);
+        $this->form->setDepartment($id);
 
-        $this->EditBranchModal = true;
+        $this->EditDepartmentModal = true;
     }
 
     public function edit(): void
@@ -36,13 +35,13 @@ class BranchEdit extends Component
             ? $this->dispatch('notify', title: 'success', message:  ' '.$this->form->name. ' Updated successfully')
             : $this->dispatch('notify', title: 'fail', message: 'Ops!! Something went wrong');
 
-        $this->EditBranchModal = false;
+        $this->EditDepartmentModal = false;
 
-        $this->dispatch('dispatch-branch-updated')->to(BranchTable::class);
+        $this->dispatch('dispatch-department-updated')->to(DepartmentTable::class);
     }
 
     public function render(): View
     {
-        return view('livewire.branch-edit');
+        return view('livewire.edit-department');
     }
 }

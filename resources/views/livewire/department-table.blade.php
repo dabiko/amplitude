@@ -22,13 +22,13 @@
     </div>
     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-            @if(count($branches) > 0)
+            @if(count($departments) > 0)
                 <table class="table-auto min-w-full divide-y bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
                     <thead class="bg-gray-50">
                     <tr>
                         <th scope="col"
                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                              #No
+                            #No
                         </th>
 
                         @include('livewire.partials.sortable-th', [
@@ -79,8 +79,8 @@
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                    @foreach ($branches as $key => $branch)
-                        <tr wire:key="{{$branch->id}}">
+                    @foreach ($departments as $key => $department)
+                        <tr wire:key="{{$department->id}}">
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                 <x-button class="px-3 py-1 hover:bg-indigo-700  bg-indigo-500 text-white rounded">
                                     {{ $loop->iteration }}
@@ -88,16 +88,16 @@
                             </td>
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                 <x-button class="px-3 py-1 hover:bg-indigo-700  bg-indigo-500 text-white rounded">
-                                    {{ $branch->id }}
+                                    {{ $department->id }}
                                 </x-button>
                             </td>
 
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-700 dark:text-white sm:pl-6">
-                                {{ $branch->name }}
+                                {{ $department->name }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                @if($branch->status === 1)
+                                @if($department->status === 1)
                                     <span class="inline-flex items-center rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                         Active
                                     </span>
@@ -110,30 +110,30 @@
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $branch->user->name }}
+                                {{ $department->user->name }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ empty(!$branch->updated_by) ? $branch->user->name : 'No Updates' }}
+                                {{ empty(!$department->updated_by) ? $department->user->name : 'No Updates' }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $branch->created_at }}
+                                {{ $department->created_at }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $branch->updated_at }}
+                                {{ $department->updated_at }}
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                <x-button @click="$dispatch('dispatch-view-branch', {id: '{{ $branch->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
+                                <x-button @click="$dispatch('dispatch-view-department', {id: '{{ $department->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
                                     <i class='far fa-eye'></i>
                                 </x-button> &ensp;
 
-                                <x-button @click="$dispatch('dispatch-edit-branch', { id: '{{ $branch->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
+                                <x-button @click="$dispatch('dispatch-edit-department', { id: '{{ $department->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
                                     <i class='far fa-edit'></i>
                                 </x-button>&ensp;
 
-                                <button @click="$dispatch('dispatch-delete-branch', { id: '{{ Crypt::encryptString($branch->id) }}', name: '{{$branch->name}}' })" class="px-3 py-1 bg-red-500 hover:bg-red-700  text-white rounded">
+                                <button @click="$dispatch('dispatch-delete-department', { id: '{{ Crypt::encryptString($department->id) }}', name: '{{$department->name}}' })" class="px-3 py-1 bg-red-500 hover:bg-red-700  text-white rounded">
                                     <i class='far fa-trash-alt'></i>
                                 </button>
                             </td>
@@ -204,7 +204,7 @@
                     </select>
                 </div>
             </div>
-            {{ $branches->onEachSide(1)->links() }}
+            {{ $departments->onEachSide(1)->links() }}
         </div>
     </div>
 </div>

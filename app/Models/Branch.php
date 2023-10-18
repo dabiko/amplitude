@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $name
  * @method static create(array $array)
  * @method static search(string $search)
+ * @method static findOrFail(string $decrypted_id)
  */
 class Branch extends Model
 {

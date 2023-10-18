@@ -6,6 +6,7 @@ use App\Models\Branch;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Rule;
+use Illuminate\Validation\Rule as ValidationRule;
 use Livewire\Form;
 
 class BranchForm extends Form
@@ -19,11 +20,13 @@ class BranchForm extends Form
     #[Rule('unique:'.Branch::class.',name', message: ' :input has already been created')]
     public string $name;
 
+
     public function setBranch(Branch $branch): void
     {
         $this->branch = $branch;
 
         $this->name = $branch->name;
+
     }
 
     public function store(): void
@@ -37,6 +40,7 @@ class BranchForm extends Form
 
         $this->reset($this->name = ' ');
     }
+
 
     public function update(): void
     {
