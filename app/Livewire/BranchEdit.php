@@ -6,6 +6,7 @@ use App\Http\Requests\BranchUpdateRequest;
 use App\Livewire\Forms\BranchForm;
 use App\Models\Branch;
 use App\Traits\EncryptDecrypt;
+use Illuminate\Database\QueryException;
 use Illuminate\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -30,15 +31,27 @@ class BranchEdit extends Component
     {
         $this->validate();
 
-        $update = $this->form->update();
+        try{
 
-        is_null($update)
-            ? $this->dispatch('notify', title: 'success', message:  ' '.$this->form->name. ' Updated successfully')
-            : $this->dispatch('notify', title: 'fail', message: 'Ops!! Something went wrong');
+            $update = $this->form->update();
 
-        $this->EditBranchModal = false;
+            is_null($update)
+                ? $this->dispatch('notify', title: 'success', message:  ' '.$this->form->name. ' Updated successfully')
+                : $this->dispatch('notify', title: 'fail', message: 'Ops!! Something went wrong');
 
-        $this->dispatch('dispatch-branch-updated')->to(BranchTable::class);
+            $this->EditBranchModal = false;
+
+            $this->dispatch('dispatch-branch-updated')->to(BranchTable::class);
+
+        }catch (QueryException $e){
+
+            $errorCode = $e->errorInfo[1];
+
+            ($errorCode == 1062)
+                ? $this->dispatch('notify', title: 'fail', message: 'we have a duplicate entry problem')
+                : $this->dispatch('notify', title: 'fail', message: 'Something string happened ');
+        }
+
     }
 
     public function render(): View

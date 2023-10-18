@@ -3,8 +3,11 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Branch;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Rule;
 use Illuminate\Validation\Rule as ValidationRule;
 use Livewire\Form;
@@ -31,14 +34,14 @@ class BranchForm extends Form
 
     public function store(): void
     {
-        Branch::create([
-            'name' => $this->name,
-            'user_id' => Auth::id(),
-            'slug' => Str::slug($this->name, '-'),
-            'status' => 1,
-        ]);
+            Branch::create([
+                'name' => str($this->name)->squish(),
+                'user_id' => Auth::id(),
+                'slug' => Str::slug($this->name, '-'),
+                'status' => 1,
+            ]);
 
-        $this->reset($this->name = ' ');
+            $this->reset($this->name = ' ');
     }
 
 
