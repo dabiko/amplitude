@@ -6,29 +6,17 @@
                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 "
                    placeholder="Search" required="">
         </label>
-
-        <div class="flex space-x-3 items-center">
-            <label for="status" class="w-40 text-sm font-medium text-gray-700 dark:text-white sm:pl-8"> Status :</label>
-            <select id="status" wire:model.live="status"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                <option value="">All</option>
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
-            </select>
-        </div>
     </div>
-    <div class="flex space-x-3">
 
-    </div>
     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-            @if(count($branches) > 0)
+            @if(count($roles) > 0)
                 <table class="table-auto min-w-full divide-y bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
                     <thead class="bg-gray-50">
                     <tr>
                         <th scope="col"
                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                              #No
+                            #No
                         </th>
 
                         @include('livewire.partials.sortable-th', [
@@ -43,11 +31,6 @@
 
                         ])
 
-                        @include('livewire.partials.sortable-th', [
-                          'columnName' => 'status',
-                          'displayName' => 'Status'
-
-                        ])
 
                         @include('livewire.partials.sortable-th', [
                            'columnName' => 'user_id',
@@ -79,8 +62,8 @@
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                    @foreach ($branches as $key => $branch)
-                        <tr wire:key.live="{{$branch->id}}">
+                    @foreach ($roles as $key => $role)
+                        <tr wire:key.live="{{$role->id}}">
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                 <x-button class="px-3 py-1 hover:bg-indigo-700  bg-indigo-500 text-white rounded">
                                     {{ $loop->iteration }}
@@ -88,52 +71,39 @@
                             </td>
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                 <x-button class="px-3 py-1 hover:bg-indigo-700  bg-indigo-500 text-white rounded">
-                                    {{ $branch->id }}
+                                    {{ $role->id }}
                                 </x-button>
                             </td>
 
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-700 dark:text-white sm:pl-6">
-                                {{ $branch->name }}
+                                {{ $role->name }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                @if($branch->status === 1)
-                                    <span class="inline-flex items-center rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                        Active
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center rounded-md bg-red-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-red-600/20">
-                                        Inactive
-                                    </span>
-                                @endif
-
+                                {{ $role->user->name }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $branch->user->name }}
+                                {{ empty(!$role->updated_by) ? $role->user->name : 'No Updates' }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ empty(!$branch->updated_by) ? $branch->user->name : 'No Updates' }}
+                                {{ $role->created_at }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $branch->created_at }}
-                            </td>
-
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $branch->updated_at }}
+                                {{ $role->updated_at }}
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                <x-button @click="$dispatch('dispatch-view-branch', { id: '{{ $branch->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
+                                <x-button @click="$dispatch('dispatch-view-role', { id: '{{ $role->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
                                     <i class='far fa-eye'></i>
                                 </x-button> &ensp;
 
-                                <x-button @click="$dispatch('dispatch-edit-branch', { id: '{{ $branch->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
+                                <x-button @click="$dispatch('dispatch-edit-role', { id: '{{ $role->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
                                     <i class='far fa-edit'></i>
                                 </x-button>&ensp;
 
-                                <button @click="$dispatch('dispatch-delete-branch', { id: '{{ Crypt::encryptString($branch->id) }}', name: '{{$branch->name}}' })" class="px-3 py-1 bg-red-500 hover:bg-red-700  text-white rounded">
+                                <button @click="$dispatch('dispatch-delete-role', { id: '{{ Crypt::encryptString($role->id) }}', name: '{{$role->name}}' })" class="px-3 py-1 bg-red-500 hover:bg-red-700  text-white rounded">
                                     <i class='far fa-trash-alt'></i>
                                 </button>
                             </td>
@@ -157,9 +127,7 @@
                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                             Name
                         </th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Status
-                        </th>
+
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                             Creator
                         </th>
@@ -182,7 +150,7 @@
                         <td colspan="100%" style="text-align: center;">
                             <div class="alert py-5 alert-primary text-gray-700 dark:text-white" role="alert">
                                 <i data-feather="alert-circle"></i>
-                                <strong class="text-yellow-500">Oops No Data Available!!! </strong>
+                                <strong class="text-indigo-500">Oops No Data Available!!! </strong>
                             </div>
                         </td>
                     </tr>
@@ -204,7 +172,7 @@
                     </select>
                 </div>
             </div>
-            {{ $branches->links() }}
+            {{ $roles->links() }}
         </div>
     </div>
 </div>
