@@ -50,6 +50,7 @@ class PermissionTable extends Component
     #[On('dispatch-permission-created')]
     #[On('dispatch-permission-updated')]
     #[On('dispatch-permission-deleted')]
+    #[On('dispatch-permission-imported')]
     public function render(): View
     {
         $permissions = Permission::search($this->search)

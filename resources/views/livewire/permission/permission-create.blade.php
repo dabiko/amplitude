@@ -3,6 +3,7 @@
         <i class="fa-solid fa-circle-plus fa-xl"></i>&ensp;
         {{ __('Permission') }}
     </x-button>
+
     <x-dialog-modal wire:model.live="CreatePermissionModal" submit="save">
         <x-slot name="title" class="text-justify">
             ADD A NEW PERMISSION

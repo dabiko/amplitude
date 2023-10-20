@@ -20,13 +20,11 @@
             </select>
         </div>
     </div>
-    <div class="flex space-x-3">
 
-    </div>
     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
             @if(count($permissions) > 0)
-                <table class="table-auto min-w-full divide-y bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
+                <table class="md:table-fixed min-w-full divide-y bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
                     <thead class="bg-gray-50">
                     <tr>
                         <th scope="col"
@@ -48,7 +46,7 @@
 
                         @include('livewire.partials.sortable-th', [
                           'columnName' => 'group_name',
-                          'displayName' => 'Group Name'
+                          'displayName' => 'Group'
 
                         ])
 
@@ -60,7 +58,7 @@
 
                         @include('livewire.partials.sortable-th', [
                           'columnName' => 'updated_by',
-                          'displayName' => 'Updated By'
+                          'displayName' => 'Updater'
 
                         ])
 
