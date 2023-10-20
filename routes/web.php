@@ -3,6 +3,7 @@
 use App\Livewire\BranchIndex;
 use App\Livewire\BranchView;
 use App\Livewire\DepartmentIndex;
+use App\Livewire\PermissionIndex;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +32,8 @@ Route::middleware([
 
     Route::get('/branch', BranchIndex::class)->name('branch.index');
     Route::get('/department', DepartmentIndex::class)->name('department.index');
+    Route::get('/permission', PermissionIndex::class)->name('permission.index');
+
 
 
 });

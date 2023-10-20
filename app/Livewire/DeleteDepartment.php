@@ -45,6 +45,6 @@ class DeleteDepartment extends Component
 
     public function render(): View
     {
-        return view('livewire.delete-department');
+        return view('livewire.department.delete-department');
     }
 }

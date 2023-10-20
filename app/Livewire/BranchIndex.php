@@ -12,6 +12,6 @@ class BranchIndex extends Component
     #[Title('Branches')]
     public function render(): View
     {
-        return view('livewire.branch-index');
+        return view('livewire.branch.branch-index');
     }
 }

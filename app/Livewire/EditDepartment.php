@@ -42,6 +42,6 @@ class EditDepartment extends Component
 
     public function render(): View
     {
-        return view('livewire.edit-department');
+        return view('livewire.department.edit-department');
     }
 }

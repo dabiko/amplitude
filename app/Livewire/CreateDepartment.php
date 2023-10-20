@@ -27,6 +27,6 @@ class CreateDepartment extends Component
 
     public function render(): View
     {
-        return view('livewire.create-department');
+        return view('livewire.department.create-department');
     }
 }

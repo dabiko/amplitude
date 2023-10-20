@@ -26,6 +26,6 @@ class ViewDepartment extends Component
 
     public function render(): View
     {
-        return view('livewire.view-department');
+        return view('livewire.department.view-department');
     }
 }

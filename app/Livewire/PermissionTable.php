@@ -2,15 +2,15 @@
 
 namespace App\Livewire;
 
-use App\Models\Department;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Permission;
 
-class DepartmentTable extends Component
+class PermissionTable extends Component
 {
     use WithPagination;
 
@@ -21,7 +21,7 @@ class DepartmentTable extends Component
     public string $search = '';
 
     #[Url(history: true)]
-    public string $status = '';
+    public string $group = '';
 
     #[Locked]
     #[Url(history: true)]
@@ -47,23 +47,21 @@ class DepartmentTable extends Component
         $this->sortDirection = 'DESC';
     }
 
-
-    #[On('dispatch-department-created')]
-    #[On('dispatch-department-updated')]
-    #[On('dispatch-department-deleted')]
+    #[On('dispatch-permission-created')]
+    #[On('dispatch-permission-updated')]
+    #[On('dispatch-permission-deleted')]
     public function render(): View
     {
-        $departments = Department::search($this->search)
-            ->with(['user','updater'])
-            ->when($this->status !== '', function ($query) {
-                $query->where('status', $this->status);
+        $permissions = Permission::search($this->search)
+            ->when($this->group !== '', function ($query) {
+                $query->where('group_name', $this->group);
             })
             ->orderBy($this->sortBy,$this->sortDirection)
             ->paginate($this->per_page);
 
-        return view('livewire.department.department-table',
+        return view('livewire.permission.permission-table',
             [
-                'departments' => $departments
+                'permissions' => $permissions
             ]
         );
     }

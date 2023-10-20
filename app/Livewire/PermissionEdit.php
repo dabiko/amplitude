@@ -2,31 +2,26 @@
 
 namespace App\Livewire;
 
-use App\Http\Requests\BranchUpdateRequest;
-use App\Livewire\Forms\BranchForm;
-use App\Models\Branch;
-use App\Traits\EncryptDecrypt;
+use App\Livewire\Forms\PermissionForm;
 use Illuminate\Database\QueryException;
 use Illuminate\View\View;
-use JetBrains\PhpStorm\NoReturn;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
-class BranchEdit extends Component
+class PermissionEdit extends Component
 {
-    use EncryptDecrypt;
+    public PermissionForm $form;
 
-    public BranchForm $form;
-
-    public bool $EditBranchModal = false;
+    public bool $UpdatePermissionModal = false;
 
 
-    #[On('dispatch-edit-branch')]
-    public function set_branch(Branch $id): void
+    #[On('dispatch-edit-permission')]
+    public function set_permission(Permission $id): void
     {
-        $this->form->setBranch($id);
+        $this->form->setPermission($id);
 
-        $this->EditBranchModal = true;
+        $this->UpdatePermissionModal = true;
     }
 
     public function edit(): void
@@ -41,9 +36,9 @@ class BranchEdit extends Component
                 ? $this->dispatch('notify', title: 'success', message:  ' '.$this->form->name. ' Updated successfully')
                 : $this->dispatch('notify', title: 'fail', message: 'Ops!! Something went wrong');
 
-            $this->EditBranchModal = false;
+            $this->UpdatePermissionModal = false;
 
-            $this->dispatch('dispatch-branch-updated')->to(BranchTable::class);
+            $this->dispatch('dispatch-permission-updated')->to(PermissionTable::class);
 
         }catch (QueryException $e){
 
@@ -51,13 +46,13 @@ class BranchEdit extends Component
 
             ($errorCode == 1062)
                 ? $this->dispatch('notify', title: 'fail', message: 'we have a duplicate entry problem')
-                : $this->dispatch('notify', title: 'fail', message: 'Something string happened ');
+                : $this->dispatch('notify', title: 'fail', message: 'Something strange happened ');
         }
 
     }
 
     public function render(): View
     {
-        return view('livewire.branch.branch-edit');
+        return view('livewire.permission.permission-edit');
     }
 }

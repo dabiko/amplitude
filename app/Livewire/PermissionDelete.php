@@ -2,14 +2,14 @@
 
 namespace App\Livewire;
 
-use App\Models\Branch;
 use App\Traits\EncryptDecrypt;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
-class BranchDelete extends Component
+class PermissionDelete extends Component
 {
     use EncryptDecrypt;
 
@@ -19,33 +19,33 @@ class BranchDelete extends Component
     #[Locked]
     public string $name;
 
-    public bool $DeleteBranchModal = false;
+    public bool $DeletePermissionModal = false;
 
-    #[On('dispatch-delete-branch')]
-    public function set_branch($id, $name): void
+    #[On('dispatch-delete-permission')]
+    public function set_permission($id, $name): void
     {
         $this->id = $id;
         $this->name = $name;
 
-        $this->DeleteBranchModal  = true;
+        $this->DeletePermissionModal  = true;
     }
 
-    public function deleteBranch(): void
+    public function deletePermission(): void
     {
-        $delete = Branch::destroy($this->decryptId($this->id));
+        $delete = Permission::destroy($this->decryptId($this->id));
 
         ($delete)
             ? $this->dispatch('notify', title: 'success', message:  ' '.$this->name. ' Deleted successfully')
             : $this->dispatch('notify', title: 'fail', message: 'Ops!! Something went wrong');
 
-        $this->dispatch('dispatch-branch-deleted')->to(BranchTable::class);
+        $this->dispatch('dispatch-permission-deleted')->to(PermissionTable::class);
 
-        $this->DeleteBranchModal  = false;
+        $this->DeletePermissionModal  = false;
 
     }
 
     public function render(): View
     {
-        return view('livewire.branch.branch-delete');
+        return view('livewire.permission.permission-delete');
     }
 }

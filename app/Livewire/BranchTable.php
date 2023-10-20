@@ -62,7 +62,7 @@ class BranchTable extends Component
 
 
 
-        return view('livewire.branch-table',
+        return view('livewire.branch.branch-table',
             [
                 'branches' => $branches
             ]

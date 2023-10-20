@@ -6,11 +6,11 @@ use Illuminate\View\View;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-class DepartmentIndex extends Component
+class PermissionIndex extends Component
 {
-    #[Title('Departments')]
+    #[Title('Permission')]
     public function render(): View
     {
-        return view('livewire.department.department-index');
+        return view('livewire.permission.permission-index');
     }
 }

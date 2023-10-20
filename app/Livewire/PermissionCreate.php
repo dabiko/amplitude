@@ -2,17 +2,16 @@
 
 namespace App\Livewire;
 
-use App\Livewire\Forms\BranchForm;
-use App\Models\Branch;
+use App\Livewire\Forms\PermissionForm;
 use Illuminate\Database\QueryException;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class CreateBranch extends Component
+class PermissionCreate extends Component
 {
-    public BranchForm $form;
+    public PermissionForm $form;
 
-    public bool $CreateBranchModal = false;
+    public bool $CreatePermissionModal = false;
 
     public function save(): void
     {
@@ -23,10 +22,11 @@ class CreateBranch extends Component
             $branch = $this->form->store();
 
             is_null($branch)
-                ? $this->dispatch('notify', title: 'success', message:  ' '.$this->form->name. ' created successfully')
+                ? $this->dispatch('notify', title: 'success', message:  ' '.$this->form->name. ' Created successfully')
                 : $this->dispatch('notify', title: 'fail', message: 'Ops!! Something went wrong');
 
-            $this->dispatch('dispatch-branch-created')->to(BranchTable::class);
+            $this->dispatch('dispatch-permission-created')->to(PermissionTable::class);
+
 
         }catch (QueryException $e){
 
@@ -34,12 +34,12 @@ class CreateBranch extends Component
 
             ($errorCode == 1062)
                 ? $this->dispatch('notify', title: 'fail', message: 'we have a duplicate entry problem')
-                : $this->dispatch('notify', title: 'fail', message: 'Something string happened ');
+                : $this->dispatch('notify', title: 'fail', message: 'Something strange happened ');
         }
     }
 
     public function render(): View
     {
-        return view('livewire.branch.create-branch');
+        return view('livewire.permission.permission-create');
     }
 }

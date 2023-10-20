@@ -31,7 +31,7 @@ class BranchView extends Component
     public function render(): View
     {
 
-        return view('livewire.branch-view');
+        return view('livewire.branch.branch-view');
 
     }
 }
