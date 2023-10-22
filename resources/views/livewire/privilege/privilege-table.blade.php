@@ -55,7 +55,7 @@
                                 {{ $role->name }}
                             </td>
 
-                            <td class="grid grid-cols-5 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                            <td class="grid grid-cols-4 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                 @foreach($role->permissions as $permission)
                                     <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-indigo-700  bg-indigo-500 text-white rounded">
                                         {{ $permission->name }}

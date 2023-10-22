@@ -6,6 +6,7 @@ use App\Livewire\DepartmentIndex;
 use App\Livewire\PermissionIndex;
 use App\Livewire\PrivilegeIndex;
 use App\Livewire\RoleIndex;
+use App\Livewire\UserIndex;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,8 @@ Route::middleware([
     Route::get('/permission', PermissionIndex::class)->name('permission.index');
     Route::get('/role', RoleIndex::class)->name('role.index');
     Route::get('/privilege', PrivilegeIndex::class)->name('privilege.index');
+    Route::get('/user', UserIndex::class)->name('user.index');
+
 
 
 

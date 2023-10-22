@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->foreignId('role_id')->index();
             $table->foreignId('department_id')->index();
             $table->foreignId('branch_id')->index();
             $table->boolean('status');

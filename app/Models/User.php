@@ -4,15 +4,28 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Collection;
 
+/**
+ * @property mixed $name
+ * @property mixed $username
+ * @property mixed $email
+ * @property mixed $branch_id
+ * @property mixed $department_id
+ * @property mixed $role_id
+ *
+ * @method static create(array $array)
+ * @method static search(string $search)
+ */
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -91,5 +104,30 @@ class User extends Authenticatable
 
             return $hasPermission;
         }
+    }
+
+    public function scopeSearch($query, $value): void
+    {
+        $query->where('name', 'like', "%{$value}%")
+            ->orWhere('id', 'like', "%{$value}%")
+            ->orWhere('username', 'like', "%{$value}%")
+            ->orWhere('email', 'like', "%{$value}%")
+            ->orWhere('created_at', 'like', "%{$value}%")
+            ->orWhere('updated_at', 'like', "%{$value}%");
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 }

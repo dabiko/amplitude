@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $name
  * @method static create(array $array)*@method static search(string$search)
  * @method static search(string $search)
+ * @method static where(string $string, int $int)
  */
 class Department extends Model
 {
