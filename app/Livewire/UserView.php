@@ -21,6 +21,7 @@ class UserView extends Component
     public string $role;
     public string $branch;
     public string $department;
+    public string $email_verified;
     public string $created_at;
     public string $updated_at;
 
@@ -39,6 +40,7 @@ class UserView extends Component
         $this->role = $user->role->name;
         $this->branch = $user->branch->name;
         $this->department = $user->department->name;
+        $this->email_verified = empty(!$user->email_verified_at) ? $user->email_verified_at : 'Pending Activation';
         $this->created_at = $user->created_at;
         $this->updated_at = $user->updated_at;
 

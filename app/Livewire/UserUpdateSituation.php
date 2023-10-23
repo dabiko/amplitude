@@ -45,7 +45,7 @@ class UserUpdateSituation extends Component
     public function updateUserSituation(): void
     {
         if ($this->id == Auth::id()){
-            $this->dispatch('notify', title: 'fail', message: 'Hmm!! Suspicious Activity. please contact support for Technical assistance');
+            $this->dispatch('notify', title: 'fail', message: 'Hmm!! Suspicious Activity on your account. Please contact Technical support for assistance');
             $this->UpdateSituationModal = false;
         }else{
             try{

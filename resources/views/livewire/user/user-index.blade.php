@@ -15,6 +15,8 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <livewire:user-view />
                 <livewire:user-update-situation />
+                <livewire:user-password-update />
+                <livewire:user-verification />
                 <livewire:user-edit />
                 <livewire:user-table />
             </div>

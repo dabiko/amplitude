@@ -68,6 +68,12 @@
                 </div>
 
                 <div class="col-span-12">
+                    <x-label for="email_verified" value="{{ __('Verified At') }}" />
+                    <x-input disabled id="email_verified" wire:model="email_verified" type="text" class="mt-1 block w-full"  autocomplete="email_verified" />
+                    <x-input-error for="email_verified" class="mt-2" />
+                </div>
+
+                <div class="col-span-12">
                     <x-label for="created_at" value="{{ __('Created At') }}" />
                     <x-input disabled id="created_at" wire:model="created_at" type="text" class="mt-1 block w-full"  autocomplete="created_at" />
                     <x-input-error for="created_at" class="mt-2" />

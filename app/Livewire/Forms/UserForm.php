@@ -74,6 +74,7 @@ class UserForm extends Form
             'password' => Hash::make('password'),
         ]);
 
+
         $this->reset(
             $this->name = ' ',
             $this->username = ' ',

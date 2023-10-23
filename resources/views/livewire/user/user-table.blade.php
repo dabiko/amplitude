@@ -24,7 +24,7 @@
     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
             @if(count($users) > 0)
-                <table class="md:table-fixed min-w-full divide-y bg-white px-6 py-8 ring-1 ring-slate-900/5 shadow-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md">
+                <table class="overflow-x-scroll md:table-auto min-w-full divide-y bg-white px-6 py-8 ring-1 ring-slate-900/5 shadow-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md">
                     <thead class="bg-gray-60 text-gray-700 dark:text-white border-gray-300 dark:border-gray-700 dark:bg-gray-900 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
                     <tr>
                         @include('livewire.partials.sortable-th', [
@@ -44,6 +44,11 @@
                           'displayName' => 'Branch'
 
                         ])
+                        @include('livewire.partials.sortable-th', [
+                           'columnName' => 'role_id',
+                           'displayName' => 'Privilege'
+
+                        ])
 
                         @include('livewire.partials.sortable-th', [
                            'columnName' => 'status',
@@ -51,11 +56,6 @@
 
                          ])
 
-                        @include('livewire.partials.sortable-th', [
-                          'columnName' => 'role_id',
-                          'displayName' => 'Privilege'
-
-                        ])
 
                         @include('livewire.partials.sortable-th', [
                           'columnName' => 'password',
@@ -68,6 +68,12 @@
                           'displayName' => 'Situation'
 
                         ])
+
+                        @include('livewire.partials.sortable-th', [
+                         'columnName' => 'email_verified_at',
+                         'displayName' => 'Email'
+
+                         ])
 
                         @include('livewire.partials.sortable-th', [
                           'columnName' => 'created_at',
@@ -104,6 +110,10 @@
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
+                                {{ $user->role->name }}
+                            </td>
+
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
                                 @if($user->status === 1)
                                     <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-green-700  bg-green-500 text-white rounded">
                                         <i class="fa-regular fa-circle-dot fa-beat-fade"></i>
@@ -117,22 +127,36 @@
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $user->role->name }}
-                            </td>
-
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
                                 @if(Hash::check('password', $user->password))
-                                    <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-red-700  bg-red-500 text-white rounded">
+                                    @if($user->id == Auth::id())
+                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '', name: '', email: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2  cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
                                         <i class="fa-solid fa-lock-open fa-fade"></i>
                                         {{ __('Default') }}
                                          <i class="fa-solid fa-key fa-fade"></i>
                                     </span>
-                                @else
-                                    <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-green-700  bg-green-500 text-white rounded">
-                                       <i class="fa-solid fa-lock fa-fade"></i>
-                                        {{ __('Secured') }}
+                                    @else
+                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username )}}', email: '{{ Crypt::encryptString($user->email )}}' })" class="flex-wrap px-3 py-1 mr-2 mb-2  cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <i class="fa-solid fa-lock-open fa-fade"></i>
+                                        {{ __('Default') }}
                                          <i class="fa-solid fa-key fa-fade"></i>
                                     </span>
+                                    @endif
+
+                                @else
+                                    @if($user->id == Auth::id())
+                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '', name: '', email: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer  hover:bg-green-700  bg-green-500 text-white rounded">
+                                      <i class="fa-solid fa-shield-halved"></i>
+                                        {{ __('Secured') }}
+                                         <i class="fa-solid fa-key"></i>
+                                    </span>
+                                    @else
+                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username )}}', email: '{{ Crypt::encryptString($user->email )}}' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer  hover:bg-green-700  bg-green-500 text-white rounded">
+                                      <i class="fa-solid fa-shield-halved"></i>
+                                        {{ __('Secured') }}
+                                         <i class="fa-solid fa-key"></i>
+                                    </span>
+                                    @endif
+
                                 @endif
 
                             </td>
@@ -160,6 +184,34 @@
                                         <span @click="$dispatch('dispatch-update-user-situation', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username) }}', situation: '{{ Crypt::encryptString($user->situation )}}', })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-green-700  bg-green-500 text-white rounded">
                                         <i class="fa-solid fa-lock-open fa-fade"></i>
                                         {{ __('Active') }}
+                                       </span>
+                                    @endif
+                                @endif
+                            </td>
+
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
+                                @if(empty($user->email_verified_at))
+                                    @if($user->id == Auth::id())
+                                        <span @click="$dispatch('dispatch-user-email-verification', { id: '', name: '', email: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <i class="fa-solid fa-envelope-open-text fa-fade"></i>
+                                        {{ __('Unverified') }}
+                                    </span>
+                                    @else
+                                        <span @click="$dispatch('dispatch-user-email-verification', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username )}}', email: '{{ Crypt::encryptString($user->email )}}' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <i class="fa-solid fa-envelope-open-text fa-fade"></i>
+                                        {{ __('Unverified') }}
+                                    </span>
+                                    @endif
+                                @else
+                                    @if($user->id == Auth::id())
+                                        <span class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <i class="fas fa-user-shield"></i>
+                                        {{ __('Verified') }}
+                                       </span>
+                                    @else
+                                        <span class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <i class="fas fa-user-shield"></i>
+                                        {{ __('Verified') }}
                                        </span>
                                     @endif
                                 @endif

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Collection;
+use Illuminate\Contracts\Auth\CanResetPassword;
 
 /**
  * @property mixed $name
@@ -26,8 +27,9 @@ use Illuminate\Support\Collection;
  * @method static create(array $array)
  * @method static search(string $search)
  * @method static findOrFail(string $id)
+ * @method static where(string $string, string $email)
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
     use HasApiTokens;
     use HasFactory;
