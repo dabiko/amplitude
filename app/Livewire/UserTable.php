@@ -48,6 +48,7 @@ class UserTable extends Component
 
     #[On('dispatch-user-created')]
     #[On('dispatch-user-updated')]
+    #[On('dispatch-situation-updated')]
     public function render(): View
     {
         $users = User::search($this->search)

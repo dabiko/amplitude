@@ -14,6 +14,7 @@
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <livewire:user-view />
+                <livewire:user-update-situation />
                 <livewire:user-edit />
                 <livewire:user-table />
             </div>

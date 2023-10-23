@@ -25,6 +25,7 @@ use Illuminate\Support\Collection;
  *
  * @method static create(array $array)
  * @method static search(string $search)
+ * @method static findOrFail(string $id)
  */
 class User extends Authenticatable
 {
@@ -40,11 +41,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.

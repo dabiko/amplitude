@@ -125,11 +125,13 @@
                                     <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-red-700  bg-red-500 text-white rounded">
                                         <i class="fa-solid fa-lock-open fa-fade"></i>
                                         {{ __('Default') }}
+                                         <i class="fa-solid fa-key fa-fade"></i>
                                     </span>
                                 @else
                                     <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-green-700  bg-green-500 text-white rounded">
-                                       <i class="fa-solid fa-lock"></i>
+                                       <i class="fa-solid fa-lock fa-fade"></i>
                                         {{ __('Secured') }}
+                                         <i class="fa-solid fa-key fa-fade"></i>
                                     </span>
                                 @endif
 
@@ -137,15 +139,29 @@
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
                                 @if($user->situation === 1)
-                                    <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-red-700  bg-red-500 text-white rounded">
-                                        <i class="fa-solid fa-lock"></i>
+                                    @if($user->id == Auth::id())
+                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '', name: '', situation: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <i class="fa-solid fa-lock fa-fade"></i>
                                         {{ __('Blocked') }}
                                     </span>
-                                @else
-                                    <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-green-700  bg-green-500 text-white rounded">
-                                        <i class="fa-solid fa-lock-open"></i>
-                                        {{ __('Active') }}
+                                    @else
+                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username) }}', situation: '{{ Crypt::encryptString($user->situation )}}', })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <i class="fa-solid fa-lock fa-fade"></i>
+                                        {{ __('Blocked') }}
                                     </span>
+                                    @endif
+                                @else
+                                    @if($user->id == Auth::id())
+                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '', name: '', situation: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <i class="fa-solid fa-lock-open fa-fade"></i>
+                                        {{ __('Active') }}
+                                       </span>
+                                    @else
+                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username) }}', situation: '{{ Crypt::encryptString($user->situation )}}', })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <i class="fa-solid fa-lock-open fa-fade"></i>
+                                        {{ __('Active') }}
+                                       </span>
+                                    @endif
                                 @endif
                             </td>
 
@@ -157,19 +173,12 @@
                                 {{ $user->updated_at }}
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                <x-button @click="$dispatch('dispatch-view-user', { id: '{{ $user->id }}' })" class="px-3 py-3  hover:bg-indigo-700 bg-indigo-500 text-white rounded">
+
+                                <x-button @click="$dispatch('dispatch-view-user', { id: '{{ Crypt::encryptString($user->id) }}' })" class="px-3 py-3  hover:bg-indigo-700 bg-indigo-500 text-white rounded">
                                     <i class='far fa-eye'></i>
                                 </x-button> &ensp;
 
-                                <x-button @click="$dispatch('dispatch-suspend-user', { id: '{{ $user->id }}' })" class="px-3 py-3  hover:bg-indigo-700 bg-indigo-500 text-white rounded">
-                                    <i class="fa-solid fa-lock-open fa-fade"></i>
-                                </x-button> &ensp;
-
-                                <x-button @click="$dispatch('dispatch-reset-password', { id: '{{ $user->id }}' })" class="px-3 py-3  hover:bg-indigo-700 bg-indigo-500 text-white rounded">
-                                    <i class="fa-solid fa-key"></i>
-                                </x-button> &ensp;
-
-                                <x-button @click="$dispatch('dispatch-edit-user', { id: '{{ $user->id }}' })" class="px-3 py-3 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
+                                <x-button @click="$dispatch('dispatch-edit-user', { id: '{{ $user->id }}', user: '{{ $user->id }}' })" class="px-3 py-3 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
                                     <i class='far fa-edit'></i>
                                 </x-button>&ensp;
                             </td>
@@ -178,8 +187,8 @@
                     </tbody>
                 </table>
             @else
-                <table class="table-auto min-w-full divide-y bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
-                    <thead class="bg-gray-50">
+                <table class="md:table-fixed min-w-full divide-y bg-white px-6 py-8 ring-1 ring-slate-900/5 shadow-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md">
+                    <thead class="bg-gray-60 text-gray-700 dark:text-white border-gray-300 dark:border-gray-700 dark:bg-gray-900 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
                     <tr>
                         <th scope="col"
                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
