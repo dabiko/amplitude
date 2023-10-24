@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\PasswordDefaultUpdateController;
 use App\Livewire\BranchIndex;
 use App\Livewire\BranchView;
 use App\Livewire\DepartmentIndex;
 use App\Livewire\PermissionIndex;
 use App\Livewire\PrivilegeIndex;
 use App\Livewire\RoleIndex;
+use App\Livewire\UserDefaultPasswordIndex;
 use App\Livewire\UserIndex;
 use Illuminate\Support\Facades\Route;
 
@@ -22,12 +24,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('default');
+
+Route::get('/password-default/update', UserDefaultPasswordIndex::class)->name('password-default-update.index');
+
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
-    'verified',
+    'verified','default',
 ])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');

@@ -44,8 +44,6 @@ class UserTable extends Component
         $this->sortDirection = 'DESC';
     }
 
-
-
     #[On('dispatch-user-created')]
     #[On('dispatch-user-updated')]
     #[On('dispatch-situation-updated')]

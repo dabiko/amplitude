@@ -151,7 +151,6 @@
                                 @csrf
 
                                 <x-dropdown-link href="{{ route('logout') }}"
-                                          wire:navigate
                                          @click.prevent="$root.submit();">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
@@ -249,7 +248,6 @@
                     @csrf
 
                     <x-responsive-nav-link href="{{ route('logout') }}"
-                                   wire:navigate
                                    @click.prevent="$root.submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>

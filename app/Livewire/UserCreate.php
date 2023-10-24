@@ -22,31 +22,14 @@ class UserCreate extends Component
 
         $user = $this->form->store();
 
-        //$user->sendEmailVerificationNotification();
-
-//       $new_user = User::where('email', $this->form->email);
-//
-//        ($new_user->sendEmailVerificationNotification())
-//            ? $this->dispatch(
-//            'notify',
-//            title: 'success',
-//            message:  'A new verification link has been sent to ' .$this->form->email
-//        )
-//
-//            : $this->dispatch(
-//            'notify',
-//            title: 'fail',
-//            message:  'There was an error while sending email to ' .$this->form->email
-//        );
-
         is_null($user)
             ? $this->dispatch('notify', title: 'success', message:  ' '.$this->form->name. ' created successfully')
             : $this->dispatch('notify', title: 'fail', message: 'Ops!! Something went wrong');
 
         $this->dispatch('dispatch-user-created')->to(UserTable::class);
 
-        $this->CreateUserModal = false;
 
+        $this->CreateUserModal = false;
 
     }
 
