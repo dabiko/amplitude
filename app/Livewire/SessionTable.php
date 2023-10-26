@@ -2,15 +2,14 @@
 
 namespace App\Livewire;
 
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
-use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class UserTable extends Component
+class SessionTable extends Component
 {
     use WithPagination;
 
@@ -19,6 +18,7 @@ class UserTable extends Component
 
     #[Url(history: true)]
     public string $search = '';
+
 
     #[Locked]
     #[Url(history: true)]
@@ -45,18 +45,15 @@ class UserTable extends Component
     }
 
 
-    #[On('dispatch-user-created')]
-    #[On('dispatch-user-updated')]
-    #[On('dispatch-situation-updated')]
     public function render(): View
     {
-        $users = User::search($this->search)
+        $sessions = DB::table('sessions')
             ->orderBy($this->sortBy,$this->sortDirection)
             ->paginate($this->per_page);
 
-        return view('livewire.user.user-table',
+        return view('livewire.session.session-table',
             [
-                'users' => $users
+                'sessions' => $sessions
             ]
         );
     }

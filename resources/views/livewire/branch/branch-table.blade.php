@@ -98,12 +98,14 @@
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
                                 @if($branch->status === 1)
-                                    <span class="inline-flex items-center rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                        Active
+                                    <span @click="$dispatch('dispatch-branch-status', { id: '{{ Crypt::encryptString($branch->id )}}', name: '{{ Crypt::encryptString($branch->name )}}', status: '{{ Crypt::encryptString($branch->status )}}' })" class="inline-flex items-center cursor-pointer rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                        <i class="fa-regular fa-circle-dot fa-beat-fade"></i>
+                                         &ensp; Active
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center rounded-md bg-red-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-red-600/20">
-                                        Inactive
+                                    <span @click="$dispatch('dispatch-branch-status', { id: '{{ Crypt::encryptString($branch->id )}}', name: '{{ Crypt::encryptString($branch->name )}}', status: '{{ Crypt::encryptString($branch->status )}}' })"  class="inline-flex items-center cursor-pointer rounded-md bg-red-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-red-600/20">
+                                        <i class="fa-regular fa-circle-dot"></i>
+                                        &ensp; Inactive
                                     </span>
                                 @endif
 

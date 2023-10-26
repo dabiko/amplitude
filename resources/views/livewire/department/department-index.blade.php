@@ -14,6 +14,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <livewire:edit-department />
                 <livewire:delete-department />
+                <livewire:department-status />
                 <livewire:view-department />
                 <livewire:department-table />
             </div>

@@ -2,14 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsurePasswordUpdate
+class AccountStatus
 {
     /**
      * Handle an incoming request.
@@ -18,8 +16,8 @@ class EnsurePasswordUpdate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Hash::check('password', Auth::user()?->password)) {
-            return redirect('password-default/update');
+        if (Auth::user()->situation == 1) {
+            return redirect('account/status');
         }
 
         return $next($request);

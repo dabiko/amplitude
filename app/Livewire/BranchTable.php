@@ -50,6 +50,7 @@ class BranchTable extends Component
     #[On('dispatch-branch-created')]
     #[On('dispatch-branch-updated')]
     #[On('dispatch-branch-deleted')]
+    #[On('dispatch-branch-status-updated')]
     public function render(): View
     {
         $branches = Branch::search($this->search)

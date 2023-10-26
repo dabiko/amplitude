@@ -6,12 +6,11 @@ use Illuminate\View\View;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-class UserIndex extends Component
+class AccountStatus extends Component
 {
-
-    #[Title('User')]
+    #[Title('Account Status')]
     public function render(): View
     {
-        return view('livewire.user.user-index');
+        return view('livewire.user.account-status');
     }
 }

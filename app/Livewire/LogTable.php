@@ -2,15 +2,16 @@
 
 namespace App\Livewire;
 
+use App\Models\logs;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
-use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class UserTable extends Component
+class LogTable extends Component
 {
     use WithPagination;
 
@@ -19,6 +20,8 @@ class UserTable extends Component
 
     #[Url(history: true)]
     public string $search = '';
+
+    public string $by_user = '';
 
     #[Locked]
     #[Url(history: true)]
@@ -45,18 +48,22 @@ class UserTable extends Component
     }
 
 
-    #[On('dispatch-user-created')]
-    #[On('dispatch-user-updated')]
-    #[On('dispatch-situation-updated')]
     public function render(): View
     {
-        $users = User::search($this->search)
+        $logs = Logs::search($this->search)
+            ->with(['user'])
+            ->when($this->by_user !== '', function ($query) {
+                $query->where('user_id', $this->by_user);
+            })
             ->orderBy($this->sortBy,$this->sortDirection)
             ->paginate($this->per_page);
 
-        return view('livewire.user.user-table',
+        $users = User::all();
+
+        return view('livewire.log.log-table',
             [
-                'users' => $users
+                'logs' => $logs,
+                'users' => $users,
             ]
         );
     }

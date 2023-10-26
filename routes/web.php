@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\PasswordDefaultUpdateController;
+use App\Livewire\AccountStatus;
 use App\Livewire\BranchIndex;
 use App\Livewire\BranchView;
 use App\Livewire\DepartmentIndex;
+use App\Livewire\LogIndex;
 use App\Livewire\PermissionIndex;
 use App\Livewire\PrivilegeIndex;
 use App\Livewire\RoleIndex;
+use App\Livewire\SessionIndex;
 use App\Livewire\UserDefaultPasswordIndex;
 use App\Livewire\UserIndex;
 use Illuminate\Support\Facades\Route;
@@ -27,12 +29,13 @@ Route::get('/', function () {
 })->middleware('default');
 
 Route::get('/password-default/update', UserDefaultPasswordIndex::class)->name('password-default-update.index');
+Route::get('/account/status', AccountStatus::class)->name('account-status.index');
 
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
-    'verified','default',
+    'verified','default','activity','situation'
 ])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
@@ -44,9 +47,7 @@ Route::middleware([
     Route::get('/role', RoleIndex::class)->name('role.index');
     Route::get('/privilege', PrivilegeIndex::class)->name('privilege.index');
     Route::get('/user', UserIndex::class)->name('user.index');
-
-
-
-
+    Route::get('/session', SessionIndex::class)->name('session.index');
+    Route::get('/log', LogIndex::class)->name('log.index');
 
 });

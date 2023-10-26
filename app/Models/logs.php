@@ -7,33 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property mixed $name
- * @method static create(array $array)*@method static search(string$search)
  * @method static search(string $search)
- * @method static where(string $string, int $int)
- * @method static findOrFail(string $id)
+ * @method static create(array $array)
+ * @method static findOrFail(int|string|null $id)
  */
-class Department extends Model
+class logs extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function updater(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'updated_by');
-    }
-
     public function scopeSearch($query, $value): void
     {
-        $query->where('name', 'like', "%{$value}%")
+        $query->where('user_id', 'like', "%{$value}%")
             ->orWhere('id', 'like', "%{$value}%")
             ->orWhere('created_at', 'like', "%{$value}%")
             ->orWhere('updated_at', 'like', "%{$value}%");
     }
-
-    protected $guarded = [];
 }

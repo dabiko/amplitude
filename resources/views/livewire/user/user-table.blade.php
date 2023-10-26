@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.keep-alive>
     <div class="flex mb-3 ml-8 mt-5">
         <label>
             <input wire:model.live.debounce.300ms="search"
@@ -53,6 +53,12 @@
                         @include('livewire.partials.sortable-th', [
                            'columnName' => 'status',
                            'displayName' => 'Status'
+
+                         ])
+
+                        @include('livewire.partials.sortable-th', [
+                           'columnName' => 'two_factor_confirmed_at',
+                           'displayName' => '2FA'
 
                          ])
 
@@ -114,14 +120,34 @@
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                @if($user->status === 1)
-                                    <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-green-700  bg-green-500 text-white rounded">
+                                @if(Cache::has('user-online' . $user->id) && $user->status == 1)
+                                    <span class="flex-wrap items-center cursor-pointer hover:bg-green-300 rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                         <i class="fa-regular fa-circle-dot fa-beat-fade"></i>
                                         {{ __('Online') }}
                                     </span>
+                                @elseif($user->last_activity < \Carbon\Carbon::now()->addSeconds(10) && $user->status == 1 )
+                                    <span class="flex-wrap items-center cursor-pointer hover:bg-yellow-300 rounded-md bg-yellow-200 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20">
+                                        <i class="fa-regular fa-circle-dot fa-beat-fade"></i>
+                                        {{ __('Inactive') }}
+                                    </span>
                                 @else
-                                    <span class="flex-wrap px-3 py-1 mr-2 mb-2  hover:bg-yellow-700  bg-yellow-500 text-white rounded">
+                                    <span class="flex-wrap items-center cursor-pointer hover:bg-yellow-300 rounded-md bg-yellow-200 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20">
+                                        <i class="fa-regular fa-circle-dot"></i>
                                         {{ __('Offline') }}
+                                    </span>
+                                @endif
+                            </td>
+
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
+                                @if(empty(!$user->two_factor_confirmed_at))
+                                    <span class="flex-wrap items-center cursor-pointer hover:bg-green-300 rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                         <i class="fa-solid fa-shield-halved"></i>
+                                        {{ __('Yes') }}
+                                    </span>
+                                @else
+                                    <span class="flex-wrap items-center cursor-pointer hover:bg-yellow-300 rounded-md bg-yellow-200 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20">
+                                       <i class="fa-solid fa-shield-halved"></i>
+                                        {{ __('No') }}
                                     </span>
                                 @endif
                             </td>
@@ -129,13 +155,13 @@
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
                                 @if(Hash::check('password', $user->password))
                                     @if($user->id == Auth::id())
-                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '', name: '', email: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2  cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '', name: '', email: '' })" class="flex-wrap items-center cursor-pointer hover:bg-green-300 rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                         <i class="fa-solid fa-lock-open fa-fade"></i>
                                         {{ __('Default') }}
                                          <i class="fa-solid fa-key fa-fade"></i>
                                     </span>
                                     @else
-                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username )}}', email: '{{ Crypt::encryptString($user->email )}}' })" class="flex-wrap px-3 py-1 mr-2 mb-2  cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username )}}', email: '{{ Crypt::encryptString($user->email )}}' })" class="flex-wrap items-center cursor-pointer hover:bg-red-300 rounded-md bg-red-200 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
                                         <i class="fa-solid fa-lock-open fa-fade"></i>
                                         {{ __('Default') }}
                                          <i class="fa-solid fa-key fa-fade"></i>
@@ -144,13 +170,13 @@
 
                                 @else
                                     @if($user->id == Auth::id())
-                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '', name: '', email: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer  hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '', name: '', email: '' })" class="flex-wrap items-center cursor-pointer hover:bg-green-300 rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                       <i class="fa-solid fa-shield-halved"></i>
                                         {{ __('Secured') }}
                                          <i class="fa-solid fa-key"></i>
                                     </span>
                                     @else
-                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username )}}', email: '{{ Crypt::encryptString($user->email )}}' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer  hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-user-reset-password', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username )}}', email: '{{ Crypt::encryptString($user->email )}}' })" class="flex-wrap items-center cursor-pointer hover:bg-green-300 rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                       <i class="fa-solid fa-shield-halved"></i>
                                         {{ __('Secured') }}
                                          <i class="fa-solid fa-key"></i>
@@ -164,24 +190,24 @@
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
                                 @if($user->situation === 1)
                                     @if($user->id == Auth::id())
-                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '', name: '', situation: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '', name: '', situation: '' })" class="flex-wrap items-center cursor-pointer hover:bg-red-300 rounded-md bg-red-200 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
                                         <i class="fa-solid fa-lock fa-fade"></i>
                                         {{ __('Blocked') }}
                                     </span>
                                     @else
-                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username) }}', situation: '{{ Crypt::encryptString($user->situation )}}', })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username) }}', situation: '{{ Crypt::encryptString($user->situation )}}', })" class="flex-wrap items-center cursor-pointer hover:bg-red-300 rounded-md bg-red-200 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
                                         <i class="fa-solid fa-lock fa-fade"></i>
                                         {{ __('Blocked') }}
                                     </span>
                                     @endif
                                 @else
                                     @if($user->id == Auth::id())
-                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '', name: '', situation: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '', name: '', situation: '' })" class="flex-wrap items-center cursor-pointer hover:bg-green-300 rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                         <i class="fa-solid fa-lock-open fa-fade"></i>
                                         {{ __('Active') }}
                                        </span>
                                     @else
-                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username) }}', situation: '{{ Crypt::encryptString($user->situation )}}', })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-update-user-situation', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username) }}', situation: '{{ Crypt::encryptString($user->situation )}}', })" class="flex-wrap items-center cursor-pointer hover:bg-green-300 rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                         <i class="fa-solid fa-lock-open fa-fade"></i>
                                         {{ __('Active') }}
                                        </span>
@@ -192,24 +218,24 @@
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
                                 @if(empty($user->email_verified_at))
                                     @if($user->id == Auth::id())
-                                        <span @click="$dispatch('dispatch-user-email-verification', { id: '', name: '', email: '' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-user-email-verification', { id: '', name: '', email: '' })" class="flex-wrap items-center cursor-pointer hover:bg-red-300 rounded-md bg-red-200 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
                                         <i class="fa-solid fa-envelope-open-text fa-fade"></i>
                                         {{ __('Unverified') }}
                                     </span>
                                     @else
-                                        <span @click="$dispatch('dispatch-user-email-verification', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username )}}', email: '{{ Crypt::encryptString($user->email )}}' })" class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-red-700  bg-red-500 text-white rounded">
+                                        <span @click="$dispatch('dispatch-user-email-verification', { id: '{{ Crypt::encryptString($user->id )}}', name: '{{ Crypt::encryptString($user->username )}}', email: '{{ Crypt::encryptString($user->email )}}' })" class="flex-wrap items-center cursor-pointer hover:bg-red-300 rounded-md bg-red-200 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
                                         <i class="fa-solid fa-envelope-open-text fa-fade"></i>
                                         {{ __('Unverified') }}
                                     </span>
                                     @endif
                                 @else
                                     @if($user->id == Auth::id())
-                                        <span class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <span class="flex-wrap items-center cursor-pointer hover:bg-green-300 rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                         <i class="fas fa-user-shield"></i>
                                         {{ __('Verified') }}
                                        </span>
                                     @else
-                                        <span class="flex-wrap px-3 py-1 mr-2 mb-2 cursor-pointer hover:bg-green-700  bg-green-500 text-white rounded">
+                                        <span class="flex-wrap items-center cursor-pointer hover:bg-green-300 rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                         <i class="fas fa-user-shield"></i>
                                         {{ __('Verified') }}
                                        </span>

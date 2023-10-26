@@ -51,6 +51,7 @@ class DepartmentTable extends Component
     #[On('dispatch-department-created')]
     #[On('dispatch-department-updated')]
     #[On('dispatch-department-deleted')]
+    #[On('dispatch-department-status-updated')]
     public function render(): View
     {
         $departments = Department::search($this->search)

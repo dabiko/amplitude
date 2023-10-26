@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.keep-alive>
     <div class="flex mb-3 ml-8 mt-5">
         <label>
             <input wire:model.live.debounce.300ms="search"
@@ -9,11 +9,12 @@
 
         <div class="flex space-x-3 items-center">
             <label for="status" class="w-40 text-sm font-medium text-gray-700 dark:text-white sm:pl-8"> Status :</label>
-            <select id="status" wire:model.live="status"
+            <select id="status" wire:model.live="by_user"
                     class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
                 <option value="">All</option>
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
+                @foreach($users as $user)
+                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                @endforeach
             </select>
         </div>
     </div>
@@ -22,7 +23,7 @@
     </div>
     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-            @if(count($departments) > 0)
+            @if(count($logs) > 0)
                 <table class="md:table-fixed min-w-full divide-y bg-white px-6 py-8 ring-1 ring-slate-900/5 shadow-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md">
                     <thead class="bg-gray-60 text-gray-700 dark:text-white border-gray-300 dark:border-gray-700 dark:bg-gray-900 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
                     <tr>
@@ -38,49 +39,33 @@
                         ])
 
                         @include('livewire.partials.sortable-th', [
-                          'columnName' => 'name',
-                          'displayName' => 'Name'
+                          'columnName' => 'user_id',
+                          'displayName' => 'User'
 
                         ])
 
                         @include('livewire.partials.sortable-th', [
-                          'columnName' => 'status',
-                          'displayName' => 'Status'
-
-                        ])
-
-                        @include('livewire.partials.sortable-th', [
-                           'columnName' => 'user_id',
-                           'displayName' => 'Creator'
-
-                         ])
-
-                        @include('livewire.partials.sortable-th', [
-                          'columnName' => 'updated_by',
-                          'displayName' => 'Updated By'
+                          'columnName' => 'ip_address',
+                          'displayName' => 'Server'
 
                         ])
 
                         @include('livewire.partials.sortable-th', [
                           'columnName' => 'created_at',
-                          'displayName' => 'Create Date'
+                          'displayName' => 'LogIn At'
 
                         ])
 
                         @include('livewire.partials.sortable-th', [
                           'columnName' => 'updated_at',
-                          'displayName' => 'Last Update'
+                          'displayName' => 'LogOut At'
 
                         ])
-
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-700 dark:text-white">
-                            Actions
-                        </th>
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                    @foreach ($departments as $key => $department)
-                        <tr wire:key="{{$department->id}}">
+                    @foreach ($logs as $key => $log)
+                        <tr wire:key.live="{{$log->id}}">
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                 <x-button class="px-3 py-1 hover:bg-indigo-700  bg-indigo-500 text-white rounded">
                                     {{ $loop->iteration }}
@@ -88,64 +73,33 @@
                             </td>
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                 <x-button class="px-3 py-1 hover:bg-indigo-700  bg-indigo-500 text-white rounded">
-                                    {{ $department->id }}
+                                    {{ $log->id }}
                                 </x-button>
                             </td>
 
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-700 dark:text-white sm:pl-6">
-                                {{ $department->name }}
+                                {{ $log->user->name }}
+                            </td>
+
+
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
+                                {{ $log->ip_address }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                @if($department->status === 1)
-                                    <span @click="$dispatch('dispatch-department-status', { id: '{{ Crypt::encryptString($department->id )}}', name: '{{ Crypt::encryptString($department->name )}}', status: '{{ Crypt::encryptString($department->status )}}' })" class="inline-flex items-center cursor-pointer rounded-md bg-green-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                         <i class="fa-regular fa-circle-dot fa-beat-fade"></i>
-                                        &ensp; Active
-                                    </span>
-                                @else
-                                    <span @click="$dispatch('dispatch-department-status', { id: '{{ Crypt::encryptString($department->id )}}', name: '{{ Crypt::encryptString($department->name )}}', status: '{{ Crypt::encryptString($department->status )}}' })" class="inline-flex items-center  cursor-pointer rounded-md bg-red-200 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-red-600/20">
-                                        <i class="fa-regular fa-circle-dot"></i>
-                                        &ensp; Inactive
-                                    </span>
-                                @endif
-
+                                {{ $log->created_at }}
                             </td>
 
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $department->user->name }}
-                            </td>
-
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ empty(!$department->updated_by) ? $department->user->name : 'No Updates' }}
-                            </td>
-
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $department->created_at }}
-                            </td>
-
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                {{ $department->updated_at }}
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-white">
-                                <x-button @click="$dispatch('dispatch-view-department', {id: '{{ $department->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
-                                    <i class='far fa-eye'></i>
-                                </x-button> &ensp;
-
-                                <x-button @click="$dispatch('dispatch-edit-department', { id: '{{ $department->id }}' })" class="px-3 py-1 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
-                                    <i class='far fa-edit'></i>
-                                </x-button>&ensp;
-
-                                <button @click="$dispatch('dispatch-delete-department', { id: '{{ Crypt::encryptString($department->id) }}', name: '{{$department->name}}' })" class="px-3 py-1 bg-red-500 hover:bg-red-700  text-white rounded">
-                                    <i class='far fa-trash-alt'></i>
-                                </button>
+                                {{ empty(!$log->updated_at) ? $log->updated_at : 'Pending...' }}
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
             @else
-                <table class="md:table-fixed min-w-full divide-y bg-white px-6 py-8 ring-1 ring-slate-900/5 shadow-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md">
-                    <thead class="bg-gray-60 text-gray-700 dark:text-white border-gray-300 dark:border-gray-700 dark:bg-gray-900 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                <table class="table-auto min-w-full divide-y bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
+                    <thead class="bg-gray-50">
                     <tr>
                         <th scope="col"
                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
@@ -153,29 +107,21 @@
                         </th>
                         <th scope="col"
                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                            #ID
+                            ID
                         </th>
                         <th scope="col"
                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                            Name
+                            User
                         </th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Status
+                            User Agent
+                        </th>
+
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            LogIn At
                         </th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Creator
-                        </th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Updated By
-                        </th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Create Date
-                        </th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Last Update
-                        </th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Actions
+                            LogOut At
                         </th>
                     </tr>
                     </thead>
@@ -184,7 +130,7 @@
                         <td colspan="100%" style="text-align: center;">
                             <div class="alert py-5 alert-primary text-gray-700 dark:text-white" role="alert">
                                 <i data-feather="alert-circle"></i>
-                                <strong class="text-yellow-500">Oops No Data Available!!! </strong>
+                                <strong class="text-indigo-500">Oops No Data Available!!! </strong>
                             </div>
                         </td>
                     </tr>
@@ -206,7 +152,7 @@
                     </select>
                 </div>
             </div>
-            {{ $departments->onEachSide(1)->links() }}
+            {{ $logs->links() }}
         </div>
     </div>
 </div>
