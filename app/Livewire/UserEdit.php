@@ -14,6 +14,7 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
+use Illuminate\Validation\Rule;
 
 class UserEdit extends Component
 {
@@ -24,7 +25,19 @@ class UserEdit extends Component
     #[Locked]
     public string $id;
 
+    #[Locked]
+    public string $privilege;
+
+    #[Locked]
+    public string $branch;
+
+    #[Locked]
+    public string $department;
+
+
     public bool $EditUserModal = false;
+
+
 
 
     #[On('dispatch-edit-user')]
@@ -37,10 +50,12 @@ class UserEdit extends Component
 
     public function edit(): void
     {
+
         $this->validate();
 
-        try{
+        //dd($this->validate(),$this->id);
 
+        try{
             $update = $this->form->update();
 
             is_null($update)

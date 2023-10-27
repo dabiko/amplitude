@@ -34,7 +34,7 @@
                     <select id="form.privilege" wire:model="form.privilege" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" autocomplete="form.privilege">
                         <option selected value="">Select privilege</option>
                         @foreach($roles as $role)
-                            <option value="{{ Crypt::encryptString($role->id) }}">{{ $role->name }}</option>
+                            <option value="{{ $role->id }}">{{ $role->name }}</option>
                         @endforeach
                     </select>
                     <x-input-error for="form.privilege" class="mt-2" />
@@ -45,7 +45,7 @@
                     <select id="form.branch" wire:model="form.branch" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" autocomplete="form.branch">
                         <option selected value="">Select branch</option>
                         @foreach($branches as $branch)
-                            <option value="{{ Crypt::encryptString($branch->id) }}">{{ $branch->name }}</option>
+                            <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                         @endforeach
                     </select>
                     <x-input-error for="form.branch" class="mt-2" />
@@ -54,9 +54,9 @@
                 <div class="col-span-12">
                     <x-label for="form.department" value="{{ __('Department') }}" />
                     <select id="form.department" wire:model="form.department" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" autocomplete="form.department">
-                        <option selected value="">Select department</option>
+                        <option  selected value="">Select department</option>
                         @foreach($departments as $department)
-                            <option value="{{ Crypt::encryptString($department->id) }}">{{ $department->name }}</option>
+                            <option value="{{ $department->id }}">{{ $department->name }}</option>
                         @endforeach
                     </select>
                     <x-input-error for="form.department" class="mt-2" />

@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Models\Branch;
 use App\Models\User;
+use App\Traits\EncryptDecrypt;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
@@ -12,6 +14,8 @@ use Livewire\WithPagination;
 
 class UserTable extends Component
 {
+    use EncryptDecrypt;
+
     use WithPagination;
 
     #[Url]
@@ -54,9 +58,12 @@ class UserTable extends Component
             ->orderBy($this->sortBy,$this->sortDirection)
             ->paginate($this->per_page);
 
+        $branches = Branch::all();
+
         return view('livewire.user.user-table',
             [
-                'users' => $users
+                'users' => $users,
+                'branches' =>  $branches
             ]
         );
     }

@@ -1,4 +1,4 @@
-<div wire:poll.keep-alive>
+<div wire:poll.visible>
     <div class="flex mb-3 ml-8 mt-5">
         <label>
             <input wire:model.live.debounce.300ms="search"
@@ -6,19 +6,6 @@
                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                    placeholder="Search" required="">
         </label>
-
-        <div class="flex space-x-3 items-center">
-            <label for="status" class="w-40 text-sm font-medium text-gray-700 dark:text-white sm:pl-8"> Group :</label>
-            <select id="status" wire:model.live="group"
-                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                <option value="">All</option>
-                <option value="branches">Branch</option>
-                <option value="departments">Department</option>
-                <option value="users">Users</option>
-                <option value="logs">Logs</option>
-                <option value="dashboard">Dashboard</option>
-            </select>
-        </div>
     </div>
 
     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -256,7 +243,7 @@
                                     <i class='far fa-eye'></i>
                                 </x-button> &ensp;
 
-                                <x-button @click="$dispatch('dispatch-edit-user', { id: '{{ $user->id }}', user: '{{ $user->id }}' })" class="px-3 py-3 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
+                                <x-button @click="$dispatch('dispatch-edit-user', { id: '{{ $user->id }}' })" class="px-3 py-3 hover:bg-indigo-700 bg-indigo-500 text-white rounded">
                                     <i class='far fa-edit'></i>
                                 </x-button>&ensp;
                             </td>

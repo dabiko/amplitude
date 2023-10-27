@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use App\Models\User;
 use App\Traits\EncryptDecrypt;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Rule;
 use Livewire\Form;
 
@@ -66,15 +67,13 @@ class UserForm extends Form
             'name' => str($this->name)->squish(),
             'username' => $this->username,
             'email' => $this->email,
-            'role_id' => $this->decryptId($this->privilege),
-            'branch_id' => $this->decryptId($this->branch),
-            'department_id' => $this->decryptId($this->department),
+            'role_id' => $this->privilege,
+            'branch_id' => $this->branch,
+            'department_id' => $this->department,
             'status' => str(0)->squish(),
             'situation' => str(0)->squish(),
             'password' => Hash::make('password'),
         ]);
-
-
 
         $this->reset(
             $this->name = ' ',
@@ -92,9 +91,9 @@ class UserForm extends Form
             'name' => str($this->name)->squish(),
             'username' => $this->username,
             'email' => $this->email,
-            'role_id' => $this->decryptId($this->privilege),
-            'branch_id' => $this->decryptId($this->branch),
-            'department_id' => $this->decryptId($this->department),
+            'role_id' => $this->privilege,
+            'branch_id' => $this->branch,
+            'department_id' => $this->department,
         ]);
     }
 }
